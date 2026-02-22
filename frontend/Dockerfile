@@ -1,10 +1,11 @@
-FROM httpd:2.4
+FROM nginx:alpine
 
-# Copy Angular build output into Apache document root
-COPY ./public-html/ /usr/local/apache2/htdocs/
+# Copy your configuration to the nginx configuration directory
+COPY example.conf /etc/nginx/conf.d/default.conf
 
-# Custom Apache config to be added later if desired
-# COPY ./httpd.conf /usr/local/apache2/conf/httpd.conf
-
-# Apache listens on port 80 inside the container
+# listen on port 80 in this container
 EXPOSE 80
+
+
+#Populate files with st
+#VOLUME /static-web-pages-directory

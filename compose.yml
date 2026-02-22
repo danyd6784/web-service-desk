@@ -1,32 +1,28 @@
 services:
-  frontend:
+  reverse-proxy:
     build: ./frontend
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - backend
 
   backend:
     build: ./backend
-    ports:
-      - "${API_PORT}:3000"
-    environment:
-      NODE_ENV: ${NODE_ENV}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+    expose:
+      - "3000"
+    env_file:
+      - ./backend/src/.env
     depends_on:
-      - db
+      - postgres
 
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+  postgres:
+    image: postgres:alpine
+    container_name: postgres_db
+    restart: always
+    env_file:
+      - .env
     volumes:
+      - ./backend/db/init/:/docker-entrypoint-initdb.d/
       - pgdata:/var/lib/postgresql/data
 
 volumes:
