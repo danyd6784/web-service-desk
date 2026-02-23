@@ -8,10 +8,11 @@ services:
 
   backend:
     build: ./backend
-    expose:
-      - "3000"
+    container_name: service_desk_backend
+    ports:
+      - "3000:3000"
     env_file:
-      - ./backend/src/.env
+      - ./backend/.env
     depends_on:
       - postgres
 
