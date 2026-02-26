@@ -1,7 +1,5 @@
-import pkg from "pg";
-import { faker } from "@faker-js/faker";
-
-const { Client } = pkg;
+const { Client } = require("pg");
+const { faker } = require("@faker-js/faker");
 
 const client = new Client({
     host: process.env.DB_HOST,
@@ -44,7 +42,7 @@ async function seed() {
         modified_at
       )
       VALUES ($1,$2,$3,$4,$5,$6,$7,to_timestamp($8 / 1000.0),to_timestamp($9 / 1000.0))
-      RETURNING user_id
+      RETURNING id
       `,
             [
                 faker.person.firstName(),
@@ -59,7 +57,7 @@ async function seed() {
             ],
         );
 
-        userIds.push(result.rows[0].user_id);
+        userIds.push(result.rows[0].id);
     }
 
     // =========================
